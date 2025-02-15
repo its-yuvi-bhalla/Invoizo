@@ -11,7 +11,7 @@ const InvoiceSchema = new mongoose.Schema({
         }
     ],
     totalAmount: { type: Number, required: true },
-    status: { type: String, enum: ['Pending', 'Paid', 'Overdue'], default: 'Pending' }
+    status: { type: String, enum: ['Pending', 'Paid'], default: 'Pending' }
 })
 
 export default mongoose.model('Invoice', InvoiceSchema)

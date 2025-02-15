@@ -1,9 +1,12 @@
 import express from 'express'
 const router = express.Router()
-import {getCustomers, createCustomer} from '../../controllers/customerController.js' 
+import {getCustomers, createCustomer , getCustomerById, deleteCustomer , updateCustomer} from '../../controllers/customerController.js' 
 
 
 router.get('/', getCustomers)
-router.post('/create', createCustomer)
+router.get('/:id', getCustomerById)
+router.post('/', createCustomer)
+router.put('/:id', updateCustomer)
+router.delete('/:id', deleteCustomer)
 
 export default router

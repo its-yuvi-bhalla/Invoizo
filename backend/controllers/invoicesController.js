@@ -85,6 +85,68 @@ export const createInvoice = async (req, res) => {
     }
 }
 
+
+export const updateInvoice = async (req, res) => {
+    try {
+        const { id } = req.params
+        const updateData = req.body
+
+        const validStatus = ['Pending','Paid']
+
+        if(req.body.status !== validStatus[0] && req.body.status !== validStatus[1]){
+            return res.status(400).json({ StatusError: "Status should be Pending or Paid" })   
+        }
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ error: "Invalid Invoice ID format" })
+        }
+
+        const invoice = await Invoices.findById(id)
+        if (!invoice) {
+            return res.status(404).json({ error: "Invoice Not Found" })
+        }
+
+        if (updateData.products && Array.isArray(updateData.products)) {
+            let totalAmount = 0
+            const updatedProducts = []
+
+            for (const item of updateData.products) {
+                const product = await Product.findById(item.product)
+
+                if (!product) {
+                    return res.status(404).json({ error: `Product with ID ${item.product} not found` })
+                }
+
+                const totalProductPrice = product.price * item.quantity
+                totalAmount += totalProductPrice
+
+                updatedProducts.push({
+                    product: product._id,
+                    quantity: item.quantity,
+                    price: product.price 
+                })
+            }
+
+            updateData.products = updatedProducts
+            updateData.totalAmount = totalAmount 
+        }
+
+        const updatedInvoice = await Invoices.findByIdAndUpdate(
+            id,
+            { $set: updateData },
+            { new: true, runValidators: true }
+        )
+
+        res.status(200).json({
+            message: "Invoice updated successfully",
+            invoice: updatedInvoice
+        })
+
+    } catch (error) {
+        console.error("Error updating invoice:", error)
+        res.status(500).json({ error: "Server Error" })
+    }
+}
+
 export const deleteInvoice = async (req,res) => {
 
     try {
