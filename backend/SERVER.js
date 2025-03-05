@@ -21,6 +21,7 @@ app.use('/api/customers', customerRoutes)
 app.use('/api/products', productRoutes)
 
 app.listen(PORT, () => {
-    console.log(`🚀 Server running on port ${PORT}`)
+  console.log(`Server running on port : ${PORT}`)
 })
+
 

@@ -10,7 +10,9 @@ module.exports = {
   theme: {
     extend: {
       colors:{
-        primary:"#9570F1"
+        primary:"#9570F1",
+        tabColor:"#0f1644",
+        appBackground:"#e1e1e1"
       }
     },
   },
